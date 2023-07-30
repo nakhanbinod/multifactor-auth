@@ -1,9 +1,11 @@
 package com.example.multifactorauth.controller;
 
 import com.example.multifactorauth.config.security.JwtTokenUtil;
+import com.example.multifactorauth.payload.request.CodeRequest;
 import com.example.multifactorauth.payload.request.LoginRequest;
 import com.example.multifactorauth.payload.response.ApiResponse;
 import com.example.multifactorauth.service.CustomUserDetailService;
+import com.example.multifactorauth.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,20 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private final CustomUserDetailService userDetailService;
+    private final UserService userService;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticate(@RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
+        ApiResponse apiResponse = userService.authenticateUser(loginRequest);
+        return ResponseEntity.ok().body(apiResponse);
+    }
 
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final ApiResponse jwtResponse = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.ok().body(jwtResponse);
+    @PostMapping("/verify")
+    public ResponseEntity<?> verifyCode(@RequestBody CodeRequest codeRequest) {
+        ApiResponse token = userService.verify(codeRequest);
+        return ResponseEntity.ok().body(token);
     }
 
 

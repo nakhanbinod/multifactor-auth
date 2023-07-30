@@ -2,6 +2,8 @@ package com.example.multifactorauth.config.security;
 
 
 import com.example.multifactorauth.config.CustomAuthProvider;
+import dev.samstevens.totp.time.SystemTimeProvider;
+import dev.samstevens.totp.time.TimeProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +35,7 @@ public class SecurityConfig {
     }
 
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -44,7 +47,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/", "/static/**", "/resources/**").permitAll()
-                .requestMatchers("/auth/**", "/user/register").permitAll()
+                .requestMatchers("/auth/**", "/user/register", "/user/verify/account/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .authenticationProvider(customAuthProvider);

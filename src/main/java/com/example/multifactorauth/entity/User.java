@@ -1,5 +1,6 @@
 package com.example.multifactorauth.entity;
 
+import com.example.multifactorauth.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,11 +24,12 @@ public class User {
     private String name;
     private String email;
     private String password;
-    private String status;
+    private String status = Status.ACTIVE.getValue();
     private boolean enableMfa;
     private String secret;
     @CreationTimestamp
     private LocalDateTime createdAt;
+    private boolean enable;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

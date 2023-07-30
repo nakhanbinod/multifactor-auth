@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
+
+    boolean existsByEmail(String email);
     @Modifying
     @Query("update User u set u.secret = :secret where u.email = :email")
     void updateSecretToken(String secret,String email);

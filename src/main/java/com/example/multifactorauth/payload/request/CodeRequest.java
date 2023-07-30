@@ -1,17 +1,13 @@
 package com.example.multifactorauth.payload.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
-
+public class CodeRequest {
     private String email;
-    private String password;
     private String code;
 }

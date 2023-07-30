@@ -3,6 +3,7 @@ package com.example.multifactorauth.config;
 import com.example.multifactorauth.payload.response.ApiResponse;
 import com.example.multifactorauth.service.CustomUserDetail;
 import com.example.multifactorauth.service.CustomUserDetailService;
+import com.example.multifactorauth.service.TotpManager;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 public class CustomAuthProvider implements AuthenticationProvider {
     private final static Logger LOGGER = LoggerFactory.getLogger(CustomAuthProvider.class);
     private final CustomUserDetailService userDetailService;
+    private final TotpManager totpManager;
 
     @Override
     public Authentication authenticate(Authentication authentication) {
@@ -27,6 +29,12 @@ public class CustomAuthProvider implements AuthenticationProvider {
         try {
             if (!new BCryptPasswordEncoder().matches(password, customUserDetail.getPassword())){
                 throw new BadCredentialsException("You've entered invalid password.");
+            }
+            if (Boolean.TRUE.equals(customUserDetail.getUser().isEnableMfa())){
+                totpManager.generateSecret();
+                String code = totpManager.getCode();
+                LOGGER.info("SECRET CODE GENERATE FROM LOGIN METHOD: {}", code);
+                userDetailService.updateSecret(code, customUserDetail.getUser().getEmail());
             }
         }catch (Exception ex){
             throw new BadCredentialsException(ex.getMessage());
