@@ -2,6 +2,8 @@ package com.example.multifactorauth.config.security;
 
 
 import com.example.multifactorauth.config.CustomAuthProvider;
+import dev.samstevens.totp.time.SystemTimeProvider;
+import dev.samstevens.totp.time.TimeProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,6 +33,7 @@ public class SecurityConfig {
     public JwtTokenFilter tokenAuthenticationFilter() {
         return new JwtTokenFilter();
     }
+
 
 
     @Bean
