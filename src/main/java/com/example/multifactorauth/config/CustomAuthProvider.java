@@ -31,7 +31,11 @@ public class CustomAuthProvider implements AuthenticationProvider {
                 throw new BadCredentialsException("You've entered invalid password.");
             }
             if (Boolean.TRUE.equals(customUserDetail.getUser().isEnableMfa())){
-                totpManager.generateSecret();
+                if (customUserDetail.getUser().getSecret() == null) {
+                    totpManager.generateSecret();
+                }else {
+                    customUserDetail.getUser().getSecret();
+                }
                 String code = totpManager.getCode();
                 LOGGER.info("SECRET CODE GENERATE FROM LOGIN METHOD: {}", code);
                 userDetailService.updateSecret(code, customUserDetail.getUser().getEmail());

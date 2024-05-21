@@ -14,6 +14,7 @@ import com.example.multifactorauth.repository.RoleRepository;
 import com.example.multifactorauth.repository.TokenRepository;
 import com.example.multifactorauth.repository.UserRepository;
 import com.example.multifactorauth.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -72,8 +73,7 @@ public class UserServiceImpl implements UserService {
 
         CustomUserDetail customUserDetail = new CustomUserDetail(user);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customUserDetail, null, customUserDetail.getAuthorities());
-        ApiResponse apiResponse = jwtTokenUtil.generateToken(authenticationToken);
-        return apiResponse;
+        return jwtTokenUtil.generateToken(authenticationToken);
     }
 
     @Override

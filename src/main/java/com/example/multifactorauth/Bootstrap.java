@@ -41,7 +41,7 @@ public class Bootstrap implements ApplicationRunner {
             user.setPassword(new BCryptPasswordEncoder().encode("123"));
             user.setRole(roleRepository.findByName(RoleEnum.ROLE_ADMIN.getValue()));
             user.setStatus(Status.ACTIVE.getValue());
-            user.setEnableMfa(false);
+            user.setEnableMfa(true);
             userRepository.save(user);
         }
     }
